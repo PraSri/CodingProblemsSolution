@@ -1,0 +1,54 @@
+#include <bits/stdc++.h>
+using namespace std;
+int dp[100] , bestIndex;
+int lis(int a[] , int n){
+    for(int i  =0;i<n;i++)
+    dp[i] = 1;
+    int best = -1;
+    for(int i = 1;i<n;i++){
+        for(int j = 0;j<i;j++){
+            if(a[j]<=a[i]){
+                int curLen = 1 + dp[j];
+                dp[i] = max(curLen,dp[i]);
+            }
+        }
+        if(dp[i]>best){
+            best = dp[i];
+            bestIndex = i;
+        }
+        // best = max(best,dp[i]);
+    }
+    for(int i=0;i<n;i++){
+        cout << dp[i] << " ";
+    }
+    cout << endl;
+    return best;
+}
+void printLIS(int a[]){
+    stack<int> s;
+    s.push(bestIndex);
+    int p = dp[bestIndex];
+    int flag = 0;
+    for(int i = bestIndex;i>=0;i--){
+        int x = dp[i];
+        if(p-dp[i]==1 && flag != x){
+            s.push(i);
+            flag = x;
+            p = dp[i];
+        }
+    }
+    while(!s.empty()){
+        int ind = s.top();
+        cout << a[ind] << " ";
+        s.pop();
+    }
+}
+int main() {
+    // cout<<"Hello World!";
+    int a[] = {10,22,9,33,21,50,41,60,80};
+    int n = 9;
+    int ans = lis(a,n);
+    cout << ans;
+    cout << endl;
+    printLIS(a);
+}
